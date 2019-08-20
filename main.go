@@ -31,17 +31,20 @@ func validSolution(board [][]int) bool {
 
 func getSubgroup(board [][]int, sgIdx int) []int {
 	ret := make([]int, 9)
+
+	top := sgIdx - (sgIdx % 3)
+
 	for i := 0; i < 3; i++ {
 		row := i + (i * 3)
 		for j := 0; j < 3; j++ {
-			col := j * 3
+			//col := j * 3
 
 			// Here we know te top left coordinates
 			for x := 0; x < 3; x++ {
-				row = row + x
+				r2 := row + x
 				for y := 0; y < 3; y++ {
-					col = col + 3
-					ret[3*i+j] = board[row][col]
+					c2 := y*j + y
+					ret[3*i+j] = board[r2][c2]
 				}
 			}
 
