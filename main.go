@@ -15,51 +15,94 @@ func main() {
 		{3, 4, 5, 2, 8, 6, 1, 7, 9},
 	}
 
-	validSolution(testBoard)
+	fmt.Println(validSolution(testBoard))
+
+	//aTester := [9]int{0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	/*
+		tia1 := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+		tia2 := []int{1, 1, 3, 4, 5, 6, 7, 8, 9}
+		tia3 := []int{7, 2, 3, 4, 5, 6, 7, 8, 9}
+
+		fmt.Println(testIntArray(tia1))
+		fmt.Println(testIntArray(tia2))
+		fmt.Println(testIntArray(tia3))
+	*/
 
 }
 
 func validSolution(board [][]int) bool {
-	ret := false
 	for i := 0; i < 9; i++ {
-		fmt.Printf("  SubGroup %d = %v\n", i, getSubgroup(board, i))
-		fmt.Printf("       Row %d = %v\n", i, getSubgroup(board, i))
-		fmt.Printf("       Col %d = %v\n", i, getSubgroup(board, i))
+		//_ = getSubgroup(board, i)
+		//fmt.Printf("  SubGroup %d = %v\n", i, getSubgroup(board, i))
+		if testIntArray(getSubgroup(board, i)) == false {
+			return false
+		}
+		fmt.Printf("       Row %d = %v\n", i, getBoardRow(board, i))
+		if testIntArray(getSubgroup(board, i)) == false {
+			return false
+		}
+		fmt.Printf("       Col %d = %v\n", i, getBoardCol(board, i))
+		if testIntArray(getSubgroup(board, i)) == false {
+			return false
+		}
+
 	}
-	return ret
+	return true
+}
+
+// testIntArray will make sure there are the numbers 1-9 exactly once in an array
+func testIntArray(ia []int) bool {
+	aTester := [9]int{0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	for i := 0; i < len(ia); i++ {
+		aTester[ia[i]-1]++
+	}
+
+	for i := 0; i < len(aTester); i++ {
+
+		if aTester[i] != 1 {
+			return false
+		}
+	}
+	return true
 }
 
 func getSubgroup(board [][]int, sgIdx int) []int {
 	ret := make([]int, 9)
 
-	top := sgIdx - (sgIdx % 3)
+	top := (sgIdx / 3) * 3
+	left := (sgIdx % 3) * 3
 
-	for i := 0; i < 3; i++ {
-		row := i + (i * 3)
-		for j := 0; j < 3; j++ {
-			//col := j * 3
+	//fmt.Printf("sgIdx:%d  top:%d  left:%d\n", sgIdx, top, left)
 
-			// Here we know te top left coordinates
-			for x := 0; x < 3; x++ {
-				r2 := row + x
-				for y := 0; y < 3; y++ {
-					c2 := y*j + y
-					ret[3*i+j] = board[r2][c2]
-				}
-			}
-
+	for x := 0; x < 3; x++ {
+		r := top + x
+		for y := 0; y < 3; y++ {
+			c := y + left
+			//fmt.Printf("r:%d  c:%d\n", r, c)
+			ret[3*x+y] = board[r][c]
 		}
+	}
+	fmt.Println()
+
+	return ret
+}
+
+func getBoardRow(board [][]int, rowIdx int) []int {
+	ret := make([]int, 9)
+	for x := 0; x < 9; x++ {
+		ret[x] = board[rowIdx][x]
 	}
 
 	return ret
 }
 
-func getRow(board [][]int, rowIdx int) []int {
+func getBoardCol(board [][]int, colIdx int) []int {
 	ret := make([]int, 9)
-	return ret
-}
+	for x := 0; x < 9; x++ {
+		ret[x] = board[x][colIdx]
+	}
 
-func getColboard(board [][]int, colIdx int) []int {
-	ret := make([]int, 9)
 	return ret
 }
